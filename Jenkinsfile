@@ -5,6 +5,8 @@ node() {
     try {
        stage 'Checkout'
             checkout scm
+            def names = nodeNames()
+            print "Name of Nodes: ${names}"
        stage 'Test'
             env.NODE_ENV = "test"
             print "Environment will be : ${env.NODE_ENV}"
@@ -39,4 +41,10 @@ node() {
             to: 'saidsef@gmail.com'
         throw err
     }
+}
+
+// This method collects a list of Node names from the current Jenkins instance
+@NonCPS
+def nodeNames() {
+  return jenkins.model.Jenkins.instance.nodes.collect { node -> node.name }
 }
