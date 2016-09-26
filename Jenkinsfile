@@ -8,6 +8,7 @@ node() {
        stage 'Test'
             env.NODE_ENV = "test"
             print "Environment will be : ${env.NODE_ENV}"
+            print "Branch name: ${env.BRANCH_NAME}"
             bash 'node -v'
             bash 'npm prune'
             bash 'npm install'
