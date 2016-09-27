@@ -7,22 +7,11 @@ node() {
             checkout scm
             def names = nodeNames()
             print "Name of Nodes: ${names}"
-       stage 'Test'
+       stage 'Print Env and Branch'
             env.NODE_ENV = "test"
             print "Environment will be : ${env.NODE_ENV}"
             print "Branch name: ${env.BRANCH_NAME}"
-            bash 'node -v'
-            bash 'npm prune'
-            bash 'npm install'
-            bash 'npm test'
-       stage 'Build Docker'
-            bash './dockerBuild.sh'
-       stage 'Deploy'
-            echo 'Push to Repo'
-            bash './dockerPushToRepo.sh'
-            echo 'ssh to web server and tell it to pull new image'
-            bash 'ssh <user>@<host> <path-to>/dockerRun.sh'
-       stage 'Cleanup'
+       stage 'Send Notice'
             echo 'prune and cleanup'
             bash 'npm prune'
             bash 'rm node_modules -rf'
