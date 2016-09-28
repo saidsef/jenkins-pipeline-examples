@@ -2,7 +2,6 @@
 
 node() {
     currentBuild.result = "SUCCESS"
-    def reason = currentBuild.rawBuild.getCauses()
     try {
        stage('Checkout') {
             checkout scm
@@ -20,7 +19,7 @@ node() {
        }
        stage('Send Notice') {
             echo 'Send success email'
-            mail body: "Reason: ${reason} \n\nproject ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful: ${env.BUILD_URL}",
+            mail body: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful: ${env.BUILD_URL}",
                  from: 'jenkins@saidsef.co.uk',
                  replyTo: 'jenkins@saidsef.co.uk',
                  subject: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful",
@@ -28,12 +27,16 @@ node() {
       }
     } catch (err) {
         currentBuild.result = "FAILURE"
-            mail body: "Reason: ${reason} \n\nproject build error is here: ${env.BUILD_URL}" ,
+            mail body: "project build error is here: ${env.BUILD_URL}" ,
                  from: 'jenkins@saidsef.co.uk',
                  replyTo: 'jenkins@saidsef.co.uk',
                  subject: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} failed:\n\n${err}",
                  to: 'saidsef@gmail.com'
         throw err
+    } finally {
+        // perform workspace cleanup only if the build have passed
+        // if the build has failed, the workspace will be kept
+        step([$class: 'WsCleanup', cleanWhenFailure: false])
     }
 }
 
