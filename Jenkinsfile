@@ -11,21 +11,24 @@ node() {
             env.NODE_ENV = "test"
             print "Environment will be : ${env.NODE_ENV}"
             print "Branch name: ${env.BRANCH_NAME}"
+       stage 'Archive Artifacts'
+            archiveArtifacts artifacts: '**/Jenkinsfile**', fingerprint: true
+            sh 'ls -lha'
        stage 'Send Notice'
             echo 'Send success email'
-            mail body: 'project build successful',
-                        from: 'saidsef@gmail.com',
-                        replyTo: 'saidsef@gmail.com.com',
-                        subject: 'project build successful',
-                        to: 'saidsef@gmail.com'
+            mail body: 'project build successful: ${env.BUILD_URL}',
+                 from: 'jenkins@saidsef.co.uk',
+                 replyTo: 'jenkins@saidsef.co.uk',
+                 subject: 'project build successful',
+                 to: 'saidsef@gmail.com'
         }
     catch (err) {
         currentBuild.result = "FAILURE"
             mail body: "project build error is here: ${env.BUILD_URL}" ,
-            from: 'saidsef@gmail.com',
-            replyTo: 'saidsef@gmail.com',
-            subject: 'project build failed',
-            to: 'saidsef@gmail.com'
+                 from: 'jenkins@saidsef.co.uk',
+                 replyTo: 'jenkins@saidsef.co.uk',
+                 subject: 'project build failed',
+                 to: 'saidsef@gmail.com'
         throw err
     }
 }
