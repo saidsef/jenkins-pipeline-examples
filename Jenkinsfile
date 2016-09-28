@@ -12,9 +12,7 @@ node() {
             print "Environment will be : ${env.NODE_ENV}"
             print "Branch name: ${env.BRANCH_NAME}"
        stage 'Send Notice'
-            echo 'prune and cleanup'
-            bash 'npm prune'
-            bash 'rm node_modules -rf'
+            echo 'Send success email'
             mail body: 'project build successful',
                         from: 'saidsef@gmail.com',
                         replyTo: 'saidsef@gmail.com.com',
