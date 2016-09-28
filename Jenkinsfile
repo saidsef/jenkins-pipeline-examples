@@ -14,15 +14,15 @@ node() {
             print "Branch name: ${env.BRANCH_NAME}"
        }
        stage('Archive Artifacts') {
-            archiveArtifacts artifacts: '**/Jenkinsfile**', fingerprint: true
+            archiveArtifacts artifacts: '**/Jenkinsfile.zip', fingerprint: true
             sh 'ls -lha'
        }
        stage('Send Notice') {
             echo 'Send success email'
-            mail body: "project build successful: ${env.BUILD_URL}",
+            mail body: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful",
                  from: 'jenkins@saidsef.co.uk',
                  replyTo: 'jenkins@saidsef.co.uk',
-                 subject: 'project build successful',
+                 subject: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful",
                  to: 'saidsef@gmail.com'
       }
     } catch (err) {
@@ -30,7 +30,7 @@ node() {
             mail body: "project build error is here: ${env.BUILD_URL}" ,
                  from: 'jenkins@saidsef.co.uk',
                  replyTo: 'jenkins@saidsef.co.uk',
-                 subject: 'project build failed',
+                 subject: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} failed:\n\n${err}",
                  to: 'saidsef@gmail.com'
         throw err
     }
