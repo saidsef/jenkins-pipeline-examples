@@ -19,7 +19,7 @@ node() {
        }
        stage('Send Notice') {
             echo 'Send success email'
-            mail body: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful",
+            mail body: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful: ${env.BUILD_URL}",
                  from: 'jenkins@saidsef.co.uk',
                  replyTo: 'jenkins@saidsef.co.uk',
                  subject: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful",
