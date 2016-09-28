@@ -2,7 +2,7 @@
 
 node() {
     currentBuild.result = "SUCCESS"
-    def reason = (currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause)) ? currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause) : currentBuild.rawBuild.getCauses()
+    def reason = currentBuild.rawBuild.getCauses()
     try {
        stage('Checkout') {
             checkout scm
