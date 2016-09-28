@@ -14,7 +14,7 @@ node() {
             print "Branch name: ${env.BRANCH_NAME}"
        }
        stage('Archive Artifacts') {
-            archiveArtifacts artifacts: '**/Jenkinsfile.zip', fingerprint: true
+            archiveArtifacts artifacts: '**/Jenkinsfile', fingerprint: true
             sh 'ls -lha'
        }
        stage('Send Notice') {
