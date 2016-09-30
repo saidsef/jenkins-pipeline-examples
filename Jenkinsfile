@@ -46,7 +46,7 @@ node() {
 def nodeNames() {
   return {
     jenkins.model.Jenkins.instance.nodes.collect {
-      node -> node.name
+       [ it.name ]
     }
   }
 }
