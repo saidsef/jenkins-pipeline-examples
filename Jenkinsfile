@@ -11,7 +11,9 @@ node() {
        stage('Print Env and Branch') {
             env.NODE_ENV = "test"
             print "Environment will be : ${env.NODE_ENV}"
-            print "Branch name: ${env.BRANCH_NAME}"
+            tokens = ${env.BRANCH_NAME}.tokenize('/')
+            branch = tokens[tokens.size()-1]
+            print "Branch name: ${branch}"
        }
        stage('Archive Artifacts') {
             archiveArtifacts artifacts: '**/Jenkinsfile', fingerprint: true
