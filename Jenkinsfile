@@ -7,7 +7,7 @@ node() {
        stage('Checkout') {
             checkout scm
             def names = nodeNames()
-            def items = nodeAllItems()
+            def items = nodeItems()
             print "Name if Items: ${items}"
             print "Name of Nodes: ${names}"
        }
@@ -54,10 +54,10 @@ def nodeNames() {
 }
 
 @NonCPS
-def nodeAllItems() {
+def nodeItems() {
   return {
-    jenkins.model.Jenkins.instance.getAllItems().collect {
-      [ name : it.name.toString(), fullName : it.fullName.toString() ]
+    jenkins.model.Jenkins.instance.items.each {
+      [ name : it.name ]
     }
   }
 }
