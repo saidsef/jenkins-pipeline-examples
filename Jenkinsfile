@@ -1,7 +1,5 @@
 #!groovy
 
-import jenkins.model.*
-
 node() {
     def stepsForParallel = [:]
     currentBuild.result = "SUCCESS"
@@ -49,7 +47,7 @@ node() {
 @NonCPS
 def nodeNames() {
   return {
-    Jenkins.instance.nodes.collect {
+    jenkins.model.Jenkins.instance.nodes.collect {
       node -> node.name
     }
   }
@@ -58,7 +56,7 @@ def nodeNames() {
 @NonCPS
 def nodeAllItems() {
   return {
-    Jenkins.instance.getAllItems().collect {
+    jenkins.model.Jenkins.instance.getAllItems().collect {
       [ name : it.name.toString(), fullName : it.fullName.toString() ]
     }
   }
