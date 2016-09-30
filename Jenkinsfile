@@ -11,7 +11,7 @@ node() {
        stage('Print Env and Branch') {
             env.NODE_ENV = "test"
             print "Environment will be : ${env.NODE_ENV}"
-            def tokens = ${env.BRANCH_NAME}.tokenize('/')
+            def tokens = ${env.JOB_NAME}.tokenize('/')
             def branch = tokens[tokens.size()-1]
             print "Branch name: ${branch}"
        }
