@@ -1,11 +1,16 @@
 #!groovy
 
+import jenkins.model.*
+
 node() {
+    def stepsForParallel = [:]
     currentBuild.result = "SUCCESS"
     try {
        stage('Checkout') {
             checkout scm
             def names = nodeNames()
+            def items = nodeAllItems()
+            print "Name if Items: ${items}"
             print "Name of Nodes: ${names}"
        }
        stage('Print Env and Branch') {
@@ -43,5 +48,18 @@ node() {
 // This method collects a list of Node names from the current Jenkins instance
 @NonCPS
 def nodeNames() {
-  return jenkins.model.Jenkins.instance.nodes.collect { node -> node.name }
+  return {
+    Jenkins.instance.nodes.collect {
+      node -> node.name
+    }
+  }
+}
+
+@NonCPS
+def nodeAllItems() {
+  return {
+    Jenkins.instance.getAllItems().collect {
+      [ name : it.name.toString(), fullName : it.fullName.toString() ]
+    }
+  }
 }
