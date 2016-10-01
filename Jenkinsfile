@@ -62,12 +62,10 @@ def postToES(options) {
 
 def sendEmail() {
   return {
-    mail {
-        body: "project build ${currentBuild.result} is here: ${env.BUILD_URL}" ,
+    mail body: "project build ${currentBuild.result} is here: ${env.BUILD_URL}" ,
         from: 'jenkins@saidsef.co.uk',
         replyTo: 'jenkins@saidsef.co.uk',
         subject: "${currentBuild.result}: project ${env.JOB_NAME} build ${env.BUILD_NUMBER}",
         to: 'said@saidsef.com'
-    }
   }
 }
