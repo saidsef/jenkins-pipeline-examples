@@ -33,9 +33,7 @@ node {
         // perform workspace cleanup only if the build have passed
         // if the build has failed, the workspace will be kept
         step([$class: 'WsCleanup', cleanWhenFailure: false])
-        def payload = JsonOutput.toJson([
-          message:
-        ])
+        def payload =  env.BUILD_MSG
         sendEmail
         def options = {
           result: currentBuild.result,
