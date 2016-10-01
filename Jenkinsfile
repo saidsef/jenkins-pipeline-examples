@@ -50,3 +50,12 @@ def nodeNames() {
     }
   }
 }
+
+@NonCPS
+def nodeItems() {
+  return {
+    jenkins.model.Jenkins.instance.items.each {
+       [ it.name ]
+    }
+  }
+}
