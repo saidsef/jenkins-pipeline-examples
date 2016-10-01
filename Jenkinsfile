@@ -7,7 +7,7 @@ node() {
        stage('Checkout') {
             checkout scm
             def names = nodeNames()
-            def items - nodeItems()
+            def items = nodeItems()
             print "Name of Items: ${items}"
             print "Name of Nodes: ${names}"
        }
