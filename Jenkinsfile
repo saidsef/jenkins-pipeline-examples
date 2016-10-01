@@ -1,43 +1,48 @@
 #!groovy
 
-node() {
+import groovy.json.JsonOutput
+import jenkins.model.*
+
+node {
     def stepsForParallel = [:]
     currentBuild.result = "SUCCESS"
+    env.BUILD_MSG = ''
     try {
        stage('Checkout') {
-            checkout scm
-            def names = nodeNames()
-            print "Name of Nodes: ${names}"
+          checkout scm
+          def names = nodeNames()
+          print "Name of Nodes: ${names}"
        }
        stage('Print Env and Branch') {
-            env.NODE_ENV = "test"
-            print "Environment will be: ${env.NODE_ENV}"
-            print "Job name: ${env.JOB_NAME}"
+          env.NODE_ENV = "test"
+          print "Environment will be: ${env.NODE_ENV}"
+          print "Job name: ${env.JOB_NAME}"
        }
        stage('Archive Artifacts') {
-            archiveArtifacts artifacts: '**/Jenkinsfile', fingerprint: true
-            sh 'ls -lha'
+          archiveArtifacts([artifacts: '**/Jenkinsfile', fingerprint: true])
+          sh 'ls -lha'
        }
        stage('Send Notice') {
-            echo 'Send success email'
-            mail body: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful: ${env.BUILD_URL}",
-                 from: 'jenkins@saidsef.co.uk',
-                 replyTo: 'jenkins@saidsef.co.uk',
-                 subject: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} successful",
-                 to: 'saidsef@gmail.com'
-      }
+          echo 'Send success email'
+       }
     } catch (err) {
-        currentBuild.result = "FAILURE"
-            mail body: "project build error is here: ${env.BUILD_URL}" ,
-                 from: 'jenkins@saidsef.co.uk',
-                 replyTo: 'jenkins@saidsef.co.uk',
-                 subject: "project ${env.JOB_NAME} build ${env.BUILD_NUMBER} failed:\n\n${err}",
-                 to: 'saidsef@gmail.com'
-        throw err
+       currentBuild.result = "FAILURE"
+       env.BUILD_MSG = err
+       throw err
     } finally {
         // perform workspace cleanup only if the build have passed
         // if the build has failed, the workspace will be kept
         step([$class: 'WsCleanup', cleanWhenFailure: false])
+        def payload = JsonOutput.toJson([
+          message:
+        ])
+        sendEmail
+        def options = {
+          result: currentBuild.result,
+          number: env.BUILD_NUMBER,
+          payload: [reason: env.BUILD_CAUSE, body: payload]
+        }
+        postToES(options)
     }
 }
 
@@ -45,8 +50,26 @@ node() {
 @NonCPS
 def nodeNames() {
   return {
-    jenkins.model.Jenkins.instance.nodes.collect {
-       [ it.name ]
+    Jenkins.instance.nodes.collect { i ->
+      [ i.name ]
+    }
+  }
+}
+
+def postToES(options) {
+  return {
+    sh "curl -s -S -XPOST http://localhost:9200/jenkins/${options.result}/${options.number} -d '{ ${options.payload} }'"
+  }
+}
+
+def sendEmail {
+  return {
+    mail {
+        body: "project build ${currentBuild.result} is here: ${env.BUILD_URL}" ,
+        from: 'jenkins@saidsef.co.uk',
+        replyTo: 'jenkins@saidsef.co.uk',
+        subject: "${currentBuild.result}: project ${env.JOB_NAME} build ${env.BUILD_NUMBER}",
+        to: 'said@saidsef.com'
     }
   }
 }
