@@ -60,7 +60,7 @@ def postToES(options) {
   }
 }
 
-def sendEmail {
+def sendEmail() {
   return {
     mail {
         body: "project build ${currentBuild.result} is here: ${env.BUILD_URL}" ,
