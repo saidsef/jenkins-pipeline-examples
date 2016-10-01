@@ -35,11 +35,11 @@ node {
         step([$class: 'WsCleanup', cleanWhenFailure: false])
         def payload =  env.BUILD_MSG
         sendEmail
-        def options = {
+        def options = [
           result: currentBuild.result,
           number: env.BUILD_NUMBER,
           payload: [reason: env.BUILD_CAUSE, body: payload]
-        }
+        ]
         postToES(options)
     }
 }
