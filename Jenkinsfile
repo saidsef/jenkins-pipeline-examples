@@ -55,11 +55,8 @@ def nodeNames() {
 }
 
 def postToES(options) {
-  return {
     print "${options}"
     sh "curl -XPOST http://localhost:9200/jenkins/jobs/${env.BUILD_NUMBER} -d '${options}'"
-    print "sent data to local ES"
-  }
 }
 
 def sendEmail() {
