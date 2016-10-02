@@ -40,6 +40,7 @@ node {
           number: env.BUILD_NUMBER,
           payload: [reason: env.BUILD_CAUSE, body: payload]
         ]
+        print options
         postToES(options)
     }
 }
