@@ -60,6 +60,7 @@ def postToES(options) {
     print "${options.number}"
     print "${options.payload}"
     sh "curl -XPOST http://localhost:9200/jenkins/${options.result}/${options.number} -d '{ ${options.payload} }'"
+    print "sent data to local ES"
   }
 }
 
