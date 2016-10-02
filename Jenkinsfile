@@ -34,7 +34,7 @@ node {
         // if the build has failed, the workspace will be kept
         step([$class: 'WsCleanup', cleanWhenFailure: false])
         def payload =  env.BUILD_MSG
-        sendEmail
+        sendEmail()
         def options = [
           result: currentBuild.result,
           number: env.BUILD_NUMBER,
