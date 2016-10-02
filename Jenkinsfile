@@ -35,11 +35,11 @@ node {
         step([$class: 'WsCleanup', cleanWhenFailure: false])
         def payload =  env.BUILD_MSG
         sendEmail()
-        def options = [
+        def options = JsonOutput.toJson([
           result: currentBuild.result,
           number: env.BUILD_NUMBER,
           payload: [reason: env.BUILD_CAUSE, body: payload]
-        ]
+        ])
         print JsonOutput.toJson(options)
         postToES(options)
     }
@@ -57,10 +57,8 @@ def nodeNames() {
 
 def postToES(options) {
   return {
-    print "${options.result}"
-    print "${options.number}"
-    print "${options.payload}"
-    sh "curl -XPOST http://localhost:9200/jenkins/${options.result}/${options.number} -d '{ ${options.payload} }'"
+    print "${options}"
+    sh "curl -XPOST http://localhost:9200/jenkins/jobs/${env.BUILD_NUMBER} -d '${options}'"
     print "sent data to local ES"
   }
 }
