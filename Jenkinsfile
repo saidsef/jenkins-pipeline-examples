@@ -56,7 +56,10 @@ def nodeNames() {
 
 def postToES(options) {
   return {
-    sh "curl -s -S -XPOST http://localhost:9200/jenkins/${options.result}/${options.number} -d '{ ${options.payload} }'"
+    print "${options.result}"
+    print "${options.number}"
+    print "${options.payload}"
+    sh "curl -XPOST http://localhost:9200/jenkins/${options.result}/${options.number} -d '{ ${options.payload} }'"
   }
 }
 
