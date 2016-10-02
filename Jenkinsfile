@@ -40,7 +40,6 @@ node {
           number: env.BUILD_NUMBER,
           payload: [reason: env.BUILD_CAUSE, body: payload]
         ])
-        print JsonOutput.toJson(options)
         postToES(options)
     }
 }
