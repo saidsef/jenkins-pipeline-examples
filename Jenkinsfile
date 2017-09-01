@@ -65,6 +65,6 @@ def sendEmail() {
         from: 'jenkins@saidsef.co.uk',
         replyTo: 'jenkins@saidsef.co.uk',
         subject: "${currentBuild.result}: project ${env.JOB_NAME} build ${env.BUILD_NUMBER}",
-        to: 'said@saidsef.com'
+        to: 'said@saidsef.co.uk'
   }
 }
