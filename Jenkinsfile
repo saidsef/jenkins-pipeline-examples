@@ -47,9 +47,8 @@ node {
 // This method collects a list of Node names from the current Jenkins instance
 @NonCPS
 def nodeNames() {
-  def nodes = Jenkins.getInstance()
   return {
-    nodes.collect { i ->
+    Jenkins.instance.nodes.collect { i ->
       [ i.name ]
     }
   }
