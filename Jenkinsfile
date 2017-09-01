@@ -56,7 +56,7 @@ def nodeNames() {
 
 def postToES(options) {
     print "${options}"
-    sh "curl -XPOST http://localhost:9200/jenkins/jobs/${env.BUILD_NUMBER} -d '${options}'"
+    sh "curl -XPOST http://localhost:9200/jenkins/jobs/${env.BUILD_NUMBER} -d '${options}' -s || true"
 }
 
 def sendEmail() {
