@@ -19,8 +19,7 @@ node {
           print "Job name: ${env.JOB_NAME}"
        }
        stage('Archive Artifacts') {
-          archiveArtifacts([artifacts: '**/Jenkinsfile', fingerprint: true])
-          sh 'ls -lha'
+          archiveArtifacts([artifacts: '**/Jenkinsfile', fingerprint: true, onlyIfSuccessful: true])
        }
        stage('Send Notice') {
           echo 'Send success email'
