@@ -20,6 +20,7 @@ node {
        }
        stage('Archive Artifacts') {
           archiveArtifacts([artifacts: '**/Jenkinsfile', fingerprint: true, onlyIfSuccessful: true])
+          stash(allowEmpty: false, includes: 'Jenkinsfile', name: 'pipeline-sample')
        }
        stage('Send Notice') {
           echo 'Send success email'
