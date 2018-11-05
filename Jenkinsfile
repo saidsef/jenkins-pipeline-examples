@@ -1,5 +1,5 @@
 #!groovy
-
+// Jenkinsfile pipeline file
 import groovy.json.JsonOutput
 import jenkins.model.*
 
